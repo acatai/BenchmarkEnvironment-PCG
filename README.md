@@ -1,3 +1,29 @@
+
+
+
+## Updates from the original repository
+
+Mostly inspired by [amidos2006
+benchmark_experiments](https://github.com/amidos2006/benchmark_experiments/tree/main) repository.
+
+
+
+### Processing results
+
+Given a folder with results for some environment (so containing `iter_N` subfolsers), one can run `process.py` script.
+
+It takes the following arguments:
+- folder: Name of the folder containing generation data
+- fitness: Type of fitness to compute ('quality', 'quality_control', or 'quality_control_diversity')
+- env: Environment name for rendering (e.g., 'sokoban-v0', 'smb-v0', 'zelda-v0')
+- render: Whether to render best individuals from each generation
+
+It will create/extend the folder `$folder_processed` creating there data, evoluition graph, and visualizations of best individuals for given fitness type `$fitness`.
+
+Example usages:
+`python process.py --env=sokoban-v0 --folder=results --fitness=quality_control`
+
+
 <p align="center">
   <img height="300px" src="images/logo.png"/>
 </p>
