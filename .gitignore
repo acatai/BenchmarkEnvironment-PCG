@@ -169,6 +169,7 @@ cython_debug/
 
 plots
 results
-
+outputs
+outputs*
 
 *_processed/

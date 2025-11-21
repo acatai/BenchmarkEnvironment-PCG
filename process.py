@@ -252,7 +252,7 @@ def plot_fitness_over_generations(stats_dict: Dict[int, Dict[str, float]],
 
 def main(folder: str = 'results', 
          fitness: str = 'quality_control',
-         env: str = 'sokoban-v0',
+         problem: str = 'sokoban-v0',
          render: bool = True):
     """
     Main function to analyze fitness statistics and generate plots.
@@ -260,12 +260,12 @@ def main(folder: str = 'results',
     Args:
         folder (str): Name of the folder containing generation data
         fitness (str): Type of fitness to compute ('quality', 'quality_control', or 'quality_control_diversity')
-        env (str): Environment name for rendering (e.g., 'sokoban-v0', 'smb-v0', 'zelda-v0')
+        problem (str): Environment name for rendering (e.g., 'sokoban-v0', 'smb-v0', 'zelda-v0')
         render (bool): Whether to render best individuals from each generation
     """
     folder_name = folder
     fitness_type = fitness
-    env_name = env
+    env_name = problem
 
     folder_path = './' + folder_name + '/'
     

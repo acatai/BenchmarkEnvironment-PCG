@@ -6,23 +6,65 @@
 Mostly inspired by [amidos2006
 benchmark_experiments](https://github.com/amidos2006/benchmark_experiments/tree/main) repository.
 
+### Installation
+1. Clone this repo to your local machine.
+2. Install the requirements using the following command `pip install -r requirements.txt`.
+3. If everything goes fine, you are ready to run the experiments or expand on them. Please check the following sections for that.
 
+
+### Running experiments
+
+Runs an experiment on given problem using given generator and writes output to a given folder using `run.py` script.
+
+It takes the following arguments:
+- `--folder`: Name of the folder to store output data
+- `--problem`: Environment name (e.g., 'sokoban-v0', 'smb-v0', 'zelda-v0') - see later for detailed description.
+- `--generator`: The file name with the generator ('random', 'ga', 'es') - see later for detailed description.
+- `--steps`:  The number of iterations to run the generator [`update`](generators/generator.py#L12) function for.
+- `--fitness`: Type of fitness to compute ('quality', 'quality_control', or 'quality_control_diversity') - see later for detailed description.
+- `--earlystop`: If set to `True`, the generator will stop as soon as the best solution is the maximum which is 1.0.
+- `--seed`: Predefined seed for the generator (otherwise random).
+
+Example usage:
+`python run.py --folder=outputs --problem=sokoban-v0 --generator=ga --steps=100 --fitness=quality_control --early_stop=True --seed=42`
 
 ### Processing results
 
-Given a folder with results for some environment (so containing `iter_N` subfolsers), one can run `process.py` script.
+Given a folder with results for some problem (so containing `iter_N` subfolsers), one can run `process.py` script.
 
 It takes the following arguments:
-- folder: Name of the folder containing generation data
-- fitness: Type of fitness to compute ('quality', 'quality_control', or 'quality_control_diversity')
-- env: Environment name for rendering (e.g., 'sokoban-v0', 'smb-v0', 'zelda-v0')
-- render: Whether to render best individuals from each generation
+- `--folder`: Name of the folder containing generation data
+- `--problem`: Environment name for rendering (e.g., 'sokoban-v0', 'smb-v0', 'zelda-v0')
+- `--fitness`: Type of fitness to compute ('quality', 'quality_control', or 'quality_control_diversity')
+- `--render`: Whether to render best individuals from each generation
 
 It will create/extend the folder `$folder_processed` creating there data, evoluition graph, and visualizations of best individuals for given fitness type `$fitness`.
 
-Example usages:
-`python process.py --env=sokoban-v0 --folder=results --fitness=quality_control`
+Example usage:
+`python process.py --folder=outputs --problem=sokoban-v0 --fitness=quality_control`
 
+
+### Default Generators
+
+- [Random Search (`random`)](generators/random.py): Every generation, a new population of individuals is randomly created and evaluated. The new population is combined with the previous generation, and the best N individuals are kept for this generation.
+- [μ + λ Evolution Strategy (`es`)](generators/es.py): Every generation, a new population of λ is mutated from the previous generation and evaluated, with the best μ individuals kept between generations. Candidates are evolved using a uniform mutation rate. 
+- [Genetic Algorithm (`ga`)](generators/ga.py): This method expands on the ES method by introducing selection and crossover operators. We use tournament selection on T individuals to select candidates that produce new offspring. One-point crossover is used to combine parents, with a crossover rate. This method uses the same uniform mutation as ES. The population size is fixed and elitism preserves the best top solutions between generations.
+
+####  Adding a new Generator
+See [guidlines from the original repository](https://github.com/amidos2006/benchmark_experiments/tree/main?tab=readme-ov-file#using-the-generator-runner).
+
+### Fitness
+
+For the fitness function, there are 3 different ones: 
+- [`quality`](generators/search.py#L132) computes the quality metric for the content and returns it as fitness. 
+- [`quality_control`](generators/search.py#L135) computes the quality metric then control if you passed the quality as cascaded fitness. 
+- [`quality_control_diversity`](generators/search.py#L141) computes the quality then controllability then diversity in cascaded manner as fitness, this fitness is not stable because diversity depends on the population and how diverse it is so the value of a chromosome from before that passes diversity might not pass it now.
+
+### Example Problems
+
+See [Problems section](#problems) from the original README, below.
+
+### Original README
 
 <p align="center">
   <img height="300px" src="images/logo.png"/>
